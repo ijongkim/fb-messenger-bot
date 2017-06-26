@@ -1,4 +1,4 @@
-\c fb_messenger_bot;
+\c d5elro0khve1bc;
 
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
