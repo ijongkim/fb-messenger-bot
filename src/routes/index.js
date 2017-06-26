@@ -13,7 +13,7 @@ module.exports.fbGet = (req, res) => {
 }
 
 module.exports.fbPost = (req, res) => {
-  const { data } = req.body
+  const data = req.body
   if (data.object === 'page') {
     data.entry.forEach(entry => {
       entry.messaging.forEach(event => {
