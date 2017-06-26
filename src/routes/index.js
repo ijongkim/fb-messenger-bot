@@ -1,5 +1,5 @@
 const axios = require('axios')
-const REQUEST_URL = `'https://graph.facebook.com/v2.6/me/messages`
+const REQUEST_URL = `https://graph.facebook.com/v2.6/me/messages`
 
 module.exports.indexGet = (req, res) => res.sendStatus(200)
 
@@ -40,7 +40,7 @@ const sendRequest = data => {
     console.log(`Response data from request: `, resp.data)
   })
   .catch(err => {
-    console.warn(`Error sending request: `, err)
+    console.warn(`Error sending request: `, err.message)
   })
 }
 
