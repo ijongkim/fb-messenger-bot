@@ -36,6 +36,12 @@ const sendRequest = data => {
     headers: { 'Content-Type': 'application/json' },
     data: data
   })
+  .then(resp => {
+    console.log(`Response data from request: `, resp.data)
+  })
+  .catch(err => {
+    console.warn(`Error sending request: `, err)
+  })
 }
 
 const receivedMessage = (event) => {
