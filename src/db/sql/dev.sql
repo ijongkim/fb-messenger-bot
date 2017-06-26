@@ -1,0 +1,12 @@
+\c fb_messenger_bot;
+
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR (80) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS address (
+  id SERIAL PRIMARY KEY,
+  full_address text NOT NULL,
+  user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE
+);
