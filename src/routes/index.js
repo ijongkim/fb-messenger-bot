@@ -17,11 +17,9 @@ module.exports.fbPost = (req, res) => {
   if (data.object === 'page') {
     data.entry.forEach(entry => {
       entry.messaging.forEach(event => {
-        const msg = event.message
-        if (!msg || event['is_echo'] || !msg.text) {
-          return
+        if (event.message) {
+          receivedMessage(event)
         }
-        receivedMessage(event)
       })
     })
   }
@@ -43,7 +41,7 @@ const sendRequest = data => {
 const receivedMessage = (event) => {
   const senderID = event.sender.id
   const text = event.message.text
-  sendRequest({
+  return sendRequest({
     recipient: { id: senderID },
     message: { text: text }
   })
