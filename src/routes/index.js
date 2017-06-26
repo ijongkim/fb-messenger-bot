@@ -4,13 +4,12 @@ const REQUEST_URL = `'https://graph.facebook.com/v2.6/me/messages`
 module.exports.indexGet = (req, res) => res.send(200)
 
 module.exports.fbGet = (req, res) => {
-  // if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === process.env.FACEBOOK_WEBHOOK_VERIFY_TOKEN) {
-  //   res.status(200).send(req.query['hub.challenge'])
-  // } else {
-  //   console.error('Unauthorized FB token')
-  //   res.sendStatus(403)
-  // }
-  res.send(200)
+  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === process.env.FACEBOOK_WEBHOOK_VERIFY_TOKEN) {
+    res.status(200).send(req.query['hub.challenge'])
+  } else {
+    console.error('Unauthorized FB token')
+    res.sendStatus(403)
+  }
 }
 
 module.exports.fbPost = (req, res) => {
