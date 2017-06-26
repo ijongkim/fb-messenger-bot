@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const { indexGet, fbGet, fbPost } = require('./routes')
 const PORT = process.env.PORT || 8080
-const HOST = process.env.HOST || 'localhost'
+const HOST = process.env.HOST || '127.0.0.1'
 const ENV = process.env.NODE_ENV
 
 app.use(bodyParser.json())

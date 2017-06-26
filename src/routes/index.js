@@ -1,7 +1,7 @@
 const axios = require('axios')
 const REQUEST_URL = `'https://graph.facebook.com/v2.6/me/messages`
 
-module.exports.indexGet = (req, res) => res.send(200)
+module.exports.indexGet = (req, res) => res.sendStatus(200)
 
 module.exports.fbGet = (req, res) => {
   if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === process.env.FACEBOOK_WEBHOOK_VERIFY_TOKEN) {
