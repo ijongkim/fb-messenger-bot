@@ -8,7 +8,7 @@ module.exports.fbGet = (req, res) => {
     res.status(200).send(req.query['hub.challenge'])
   } else {
     console.error('Unauthorized FB token')
-    res.sendStatus(403)
+    res.sendStatus(200)
   }
 }
 
