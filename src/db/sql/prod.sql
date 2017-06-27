@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS d5elro0khve1bc;
-CREATE DATABASE d5elro0khve1bc;
-
 \c d5elro0khve1bc;
 
 CREATE TABLE IF NOT EXISTS users (
