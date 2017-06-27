@@ -35,19 +35,25 @@ const handleMessageRequest = event => {
 const respondToRequest = event => {
   const text = event.message.text
   const senderID = event.sender.id
-  let request
   let response
   if (text.match('ADD')) {
-    request = text.match(/ADD (.*)/)[1]
+    const request = text.match(/ADD (.*)/)[1]
     Task.insertTask({ user_id: senderID, description: request })
+    .then(() => {
+      response = constructResponse({ senderID: senderID, text: `To-do item “${request}” added to list.` })
+    })
   } else if (text.match('LIST DONE')) {
-    const tasks = Task.selectCompletedTasks({ user_id: senderID })
-    response = constructResponse({ senderID: senderID, text: tasks })
+    Task.selectCompletedTasks({ user_id: senderID })
+    .then(tasks => {
+      response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You have ${tasks.length} item marked as done:`, true) })
+    })
   } else if (text.match('LIST')) {
-    const tasks = Task.selectTasks({ user_id: senderID })
-    response = constructResponse({ senderID: senderID, text: tasks })
+    Task.selectTasks({ user_id: senderID })
+    .then(tasks => {
+      response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
+    })
   } else if (text.match(/#(.) DONE/)) {
-    const taskID = text.match(/#(.) DONE/)[1]
+    const taskID = parseInt(text.match(/#(.) DONE/)[1])
     Task.markAsComplete({ id: taskID })
     .then(description => {
       response = constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` })
@@ -56,4 +62,12 @@ const respondToRequest = event => {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
   sendRequest(response)
+}
+
+const formatListResponse = (data, botMessage, showCompleted = false) => {
+  const tasks = data.map((task, i) => {
+    const msg = `#${task.id}: ${task.description}`
+    return showCompleted ? `${msg} completed (${task.date_modified.toUTCString()})` : msg
+  })
+  return [botMessage].concat(tasks).join('\n')
 }
