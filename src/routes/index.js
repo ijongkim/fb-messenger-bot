@@ -59,6 +59,7 @@ const respondToRequest = event => {
       response = constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` })
     })
   } else {
+    console.log(event, senderID, constructResponse)j
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
   sendRequest(response)
