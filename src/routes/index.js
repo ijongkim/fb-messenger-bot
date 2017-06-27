@@ -39,9 +39,11 @@ const respondToRequest = event => {
   let response
   if (text.match('ADD')) {
     const request = text.match(/ADD (.*)/)[1]
+    console.log(request)
     Task.insertTask({ user_id: senderID, description: request })
     .then(() => {
       response = constructResponse({ senderID: senderID, text: `To-do item “${request}” added to list.` })
+      console.log(response)
     })
   } else if (text.match('LIST DONE')) {
     Task.selectCompletedTasks({ user_id: senderID })
@@ -70,7 +72,6 @@ const respondToRequest = event => {
   } else {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
-  console.log(response)
   return sendRequest(response)
 }
 
