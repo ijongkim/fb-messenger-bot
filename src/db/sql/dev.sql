@@ -1,17 +1,21 @@
+DROP DATABASE IF EXISTS fb_messenger_bot;
+CREATE DATABASE fb_messenger_bot;
+
 \c fb_messenger_bot;
 
 CREATE TABLE IF NOT EXISTS users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR (80) NOT NULL UNIQUE
+  id VARCHAR(40) PRIMARY KEY UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS addresses (
+CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
-  full_address text NOT NULL,
-  user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE
+  date_created TIMESTAMP DEFAULT now() NOT NULL,
+  date_modified TIMESTAMP DEFAULT NULL,
+  completed BOOLEAN NOT NULL DEFAULT FALSE,
+  description VARCHAR (300) NOT NULL,
+  user_id VARCHAR(40) NOT NULL REFERENCES users ON DELETE CASCADE
 );
 
-INSERT INTO users (username) VALUES ('admin');
-INSERT INTO users (username) VALUES ('guest');
-INSERT INTO addresses (full_address, user_id) VALUES ('1 Market St, San Francisco CA 94105', 1);
-INSERT INTO addresses (full_address, user_id) VALUES ('1 Telegraph Hill Blvd, San Francisco, CA 94133', 2);
+INSERT INTO users (id) VALUES ('12345abcde');
+INSERT INTO tasks (description, user_id) VALUES ('Wash car', '12345abcde');
+INSERT INTO tasks (description, user_id) VALUES ('Buy milk, veggies, meat, bread, grapes, and watermelon at Safeway', '12345abcde');
