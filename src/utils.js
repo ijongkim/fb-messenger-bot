@@ -1,5 +1,5 @@
 const axios = require('axios')
-const User = require('./db/User')
+const User = require('./db/user')
 const REQUEST_URL = `https://graph.facebook.com/v2.6/me/messages`
 const HELP_MSG = [
   'Type the following commands: ',
