@@ -1,7 +1,7 @@
 const axios = require('axios')
 const User = require('./db/user')
 const REQUEST_URL = `https://graph.facebook.com/v2.6/me/messages`
-const HELP_MSG = [
+module.exports.HELP_MSG = [
   'Type the following commands to use your list: ',
   '- HELP: for these instructions',
   '- LIST: for a list of all your tasks',
@@ -10,9 +10,9 @@ const HELP_MSG = [
   '- LIST DONE: for a list of all completed tasks'
 ].join('\n\n')
 
-const constructResponse = ({ senderID, text }) => ({ recipient: { id: senderID }, message: { text: text } })
+module.exports.constructResponse = ({ senderID, text }) => ({ recipient: { id: senderID }, message: { text: text } })
 
-const sendRequest = data => {
+module.exports.sendRequest = data => {
   return axios({
     url: REQUEST_URL,
     params: {
@@ -44,7 +44,3 @@ module.exports.verifyAuth = senderID => {
     .then(() => Promise.resolve())
   })
 }
-
-module.exports.HELP_MSG
-module.exports.sendRequest
-module.exports.constructResponse
