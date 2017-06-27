@@ -13,6 +13,7 @@ module.exports.HELP_MSG = [
 module.exports.constructResponse = ({ senderID, text }) => ({ recipient: { id: senderID }, message: { text: text } })
 
 module.exports.sendRequest = data => {
+  console.log('request data ------------------ ', data)
   return axios({
     url: REQUEST_URL,
     params: {
