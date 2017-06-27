@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node src/index.js",
-    "dev": "NODE_ENV=development nodemon src/index.js"
+    "dev": "NODE_ENV=development nodemon src/index.js",
+    "test": "ava"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -18,6 +19,7 @@
     "pg-promise": "5.9.0"
   },
   "devDependencies": {
+    "ava": "^0.19.1",
     "nodemon": "1.11.0"
   }
 }
