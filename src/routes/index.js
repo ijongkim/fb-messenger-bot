@@ -1,5 +1,5 @@
-const axios = require('axios')
-const REQUEST_URL = `https://graph.facebook.com/v2.6/me/messages`
+const Task = require('../db/task')
+const { sendRequest, verifyAuth, constructResponse, HELP_MSG } = require('./utils')
 
 module.exports.indexGet = (req, res) => res.sendStatus(200)
 
@@ -18,7 +18,7 @@ module.exports.fbPost = (req, res) => {
     data.entry.forEach(entry => {
       entry.messaging.forEach(event => {
         if (event.message) {
-          receivedMessage(event)
+          handleMessageRequest(event)
         }
       })
     })
@@ -26,29 +26,34 @@ module.exports.fbPost = (req, res) => {
   res.sendStatus(200)
 }
 
-const sendRequest = data => {
-  return axios({
-    url: REQUEST_URL,
-    params: {
-      access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN
-    },
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    data: data
-  })
-  .then(resp => {
-    console.log(`Response data from request: `, resp.data)
-  })
-  .catch(err => {
-    console.warn(`Error sending request: `, err.message)
-  })
+const handleMessageRequest = event => {
+  const senderID = event.sender.id
+  return verifyAuth(senderID)
+  .then(() => respondToRequest(event))
 }
 
-const receivedMessage = (event) => {
-  const senderID = event.sender.id
+const respondToRequest = event => {
   const text = event.message.text
-  return sendRequest({
-    recipient: { id: senderID },
-    message: { text: text }
-  })
+  const senderID = event.sender.id
+  let request
+  let response
+  if (text.match('ADD')) {
+    request = text.match(/ADD (.*)/)[1]
+    Task.insertTask({ user_id: senderID, description: request })
+  } else if (text.match('LIST DONE')) {
+    const tasks = Task.selectCompletedTasks({ user_id: senderID })
+    response = constructResponse({ senderID: senderID, text: tasks })
+  } else if (text.match('LIST')) {
+    const tasks = Task.selectTasks({ user_id: senderID })
+    response = constructResponse({ senderID: senderID, text: tasks })
+  } else if (text.match(/#(.) DONE/)) {
+    const taskID = text.match(/#(.) DONE/)[1]
+    Task.markAsComplete({ id: taskID })
+    .then(description => {
+      response = constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` })
+    })
+  } else {
+    response = constructResponse({ senderID: senderID, text: HELP_MSG })
+  }
+  sendRequest(response)
 }
