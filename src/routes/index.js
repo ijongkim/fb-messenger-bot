@@ -32,6 +32,7 @@ const handleMessageRequest = event => {
   .then(() => respondToRequest(event))
 }
 
+// To-Do: Function is too long. Will need to break this out into separate functions for each if-statement
 const respondToRequest = event => {
   const text = event.message.text
   const senderID = event.sender.id

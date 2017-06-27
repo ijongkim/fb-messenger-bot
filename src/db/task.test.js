@@ -4,7 +4,7 @@ import User from './user'
 import Task from './task'
 
 /*
-Tests are consuming a lot of my development time so I will need to delay further tests
+Tests are consuming a lot of my development time so I will need to delay further tests. Some tests are failing
 */
 
 test.before(t => {

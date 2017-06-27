@@ -3,7 +3,7 @@ import Main from './index'
 import User from './user'
 
 /*
-Tests are consuming a lot of my development time so I will need to delay further tests
+Tests are consuming a lot of my development time so I will need to delay further tests. Some tests are failing
 */
 
 test.beforeEach(t => {
