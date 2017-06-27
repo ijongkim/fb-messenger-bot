@@ -59,10 +59,10 @@ const respondToRequest = event => {
       response = constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` })
     })
   } else {
-    console.log(event, senderID, constructResponse)j
+    console.log(event, senderID, constructResponse)
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
-  sendRequest(response)
+  return sendRequest(response)
 }
 
 const formatListResponse = (data, botMessage, showCompleted = false) => {
