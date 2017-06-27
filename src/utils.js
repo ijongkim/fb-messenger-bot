@@ -2,13 +2,13 @@ const axios = require('axios')
 const User = require('./db/user')
 const REQUEST_URL = `https://graph.facebook.com/v2.6/me/messages`
 const HELP_MSG = [
-  'Type the following commands: ',
-  'HELP: for these instructions',
-  'LIST: for a list of all your tasks',
+  'Type the following commands to use your list: ',
+  '- HELP: for these instructions',
+  '- LIST: for a list of all your tasks',
   `#<number> DONE: to mark a task as complete. For example, '#4 DONE' will mark task #4 as complete`,
-  `ADD <task description>: to add a new task with the description. For example, 'ADD buy milk' will add this as a new task`,
-  'LIST DONE: for a list of all completed tasks'
-].join('\n')
+  `- ADD <task description>: to add a new task with the description. For example, 'ADD buy milk' will add this as a new task`,
+  '- LIST DONE: for a list of all completed tasks'
+].join('\n\n')
 
 const constructResponse = ({ senderID, text }) => ({ recipient: { id: senderID }, message: { text: text } })
 
@@ -41,10 +41,7 @@ module.exports.verifyAuth = senderID => {
   })
   .catch(_ => {
     return User.insertUser({ id: senderID })
-    .then(() => {
-      const data = constructResponse({senderID: senderID, text: HELP_MSG})
-      return sendRequest(data)
-    })
+    .then(() => Promise.resolve())
   })
 }
 
