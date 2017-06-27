@@ -70,6 +70,7 @@ const respondToRequest = event => {
   } else {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
+  console.log(response)
   return sendRequest(response)
 }
 
