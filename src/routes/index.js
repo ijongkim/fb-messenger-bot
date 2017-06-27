@@ -1,5 +1,5 @@
 const Task = require('../db/task')
-const { sendRequest, verifyAuth, constructResponse, HELP_MSG } = require('./utils')
+const { sendRequest, verifyAuth, constructResponse, HELP_MSG } = require('../utils')
 
 module.exports.indexGet = (req, res) => res.sendStatus(200)
 
