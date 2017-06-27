@@ -49,3 +49,7 @@ A Facebook Messenger Bot that creates and lists tasks as well as delete them
 - add search functionality
 - make bot messages more personalized and informal, e.g. NLP
 - Make use of Facebook’s message template to provide a richer UI experience
+
+## Tests Overview
+- Basic unit tests for database and SQL queries
+- With the short amount of time provided I decided to sacrifice test writing to actually coding the core functionality of the application. Some tests are failing because I had issues setting them up. If I had more time I'd focus more on TDD, unit and integration testing, across the whole application.
