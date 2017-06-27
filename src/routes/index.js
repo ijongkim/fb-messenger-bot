@@ -45,12 +45,20 @@ const respondToRequest = event => {
   } else if (text.match('LIST DONE')) {
     Task.selectCompletedTasks({ user_id: senderID })
     .then(tasks => {
-      response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You have ${tasks.length} item marked as done:`, true) })
+      if (!tasks) {
+        response = constructResponse({ senderID: senderID, text: 'You do not have any completed items. Use HELP for instructions' })
+      } else {
+        response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You have ${tasks.length} item marked as done:`, true) })
+      }
     })
   } else if (text.match('LIST')) {
     Task.selectTasks({ user_id: senderID })
     .then(tasks => {
-      response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
+      if (!tasks) {
+        response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
+      } else {
+        response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
+      }
     })
   } else if (text.match(/#(.) DONE/)) {
     const taskID = parseInt(text.match(/#(.) DONE/)[1])
