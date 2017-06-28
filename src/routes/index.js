@@ -56,7 +56,9 @@ const respondToRequest = event => {
     Task.selectTasks({ user_id: senderID })
     .then(tasks => {
       if (!tasks) {
+        console.log('in LISTing tasks: ', tasks, senderID, response)
         response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
+        console.log('response should be valid :', response)
       } else {
         response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
       }
@@ -70,6 +72,7 @@ const respondToRequest = event => {
   } else {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
+  console.log('response should be valid :', response)
   return sendRequest(response)
 }
 

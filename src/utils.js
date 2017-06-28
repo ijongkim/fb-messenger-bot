@@ -13,7 +13,6 @@ module.exports.HELP_MSG = [
 module.exports.constructResponse = ({ senderID, text }) => ({ recipient: { id: senderID }, message: { text: text } })
 
 module.exports.sendRequest = data => {
-  console.log('request data ------------------ ', data)
   return axios({
     url: REQUEST_URL,
     params: {
@@ -27,7 +26,6 @@ module.exports.sendRequest = data => {
     console.log(`Response data from request: `, resp.data)
   })
   .catch(err => {
-    console.log(err)
     console.warn(`Error sending request: `, err.message)
   })
 }
