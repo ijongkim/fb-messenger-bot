@@ -8,4 +8,4 @@ module.exports.insertTask = ({ description, user_id }) => db.none(`INSERT INTO t
 
 module.exports.markAsComplete = ({ id }) => db.one(`UPDATE tasks SET completed = true WHERE id = ${id} RETURNING description`)
 
-module.exports.selectCompletedTasks = ({ user_id }) => db.manyOrNone(`SELECT * FROM tasks WHERE user_id = '${user_id} AND completed = true'`)
+module.exports.selectCompletedTasks = ({ user_id }) => db.manyOrNone(`SELECT * FROM tasks WHERE user_id = '${user_id}' AND completed = true`)
