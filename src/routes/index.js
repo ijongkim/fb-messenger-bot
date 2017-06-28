@@ -53,10 +53,11 @@ const respondToRequest = event => {
       }
     })
   } else if (text.match('LIST')) {
+    console.log('in LISTing tasks: ', tasks, senderID, response)
     Task.selectTasks({ user_id: senderID })
     .then(tasks => {
       if (!tasks) {
-        console.log('in LISTing tasks: ', tasks, senderID, response)
+        console.log('got tasks: ', tasks, senderID, response)
         response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
         console.log('response should be valid :', response)
       } else {
@@ -72,7 +73,7 @@ const respondToRequest = event => {
   } else {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
-  console.log('response should be valid :', response)
+  console.log('response should be valid at line 75:', response)
   return sendRequest(response)
 }
 
