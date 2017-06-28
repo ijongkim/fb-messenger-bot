@@ -61,6 +61,7 @@ const respondToRequest = event => {
         response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
         console.log('response should be valid :', response)
       } else {
+        console.log('tasks exists: ', tasks)
         response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
       }
     })
