@@ -27,6 +27,7 @@ module.exports.sendRequest = data => {
     console.log(`Response data from request: `, resp.data)
   })
   .catch(err => {
+    console.log(err)
     console.warn(`Error sending request: `, err.message)
   })
 }
