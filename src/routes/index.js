@@ -1,5 +1,5 @@
 const Task = require('../db/task')
-const { sendRequest, verifyAuth, constructResponse, HELP_MSG } = require('../utils')
+const { sendResponse, verifyAuth, constructResponse, HELP_MSG } = require('../utils')
 
 module.exports.indexGet = (req, res) => res.sendStatus(200)
 
@@ -29,51 +29,46 @@ module.exports.fbPost = (req, res) => {
 const handleMessageRequest = event => {
   const senderID = event.sender.id
   return verifyAuth(senderID)
-  .then(() => respondToRequest(event))
+  .then(() => buildResponseFromRequest(event))
+  .then(resp => sendResponse(resp))
 }
 
 // To-Do: Function is too long. Will need to break this out into separate functions for each if-statement
-const respondToRequest = event => {
+const buildResponseFromRequest = event => {
   const text = event.message.text
   const senderID = event.sender.id
-  let response
   if (text.match('ADD')) {
     const request = text.match(/ADD (.*)/)[1]
-    Task.insertTask({ user_id: senderID, description: request })
+    return Task.insertTask({ user_id: senderID, description: request })
     .then(() => {
-      response = constructResponse({ senderID: senderID, text: `To-do item “${request}” added to list.` })
+      return constructResponse({ senderID: senderID, text: `To-do item “${request}” added to list.` })
     })
   } else if (text.match('LIST DONE')) {
-    Task.selectCompletedTasks({ user_id: senderID })
+    return Task.selectCompletedTasks({ user_id: senderID })
     .then(tasks => {
       if (!tasks.length) {
-        response = constructResponse({ senderID: senderID, text: 'You do not have any completed items. Use HELP for instructions' })
+        return constructResponse({ senderID: senderID, text: 'You do not have any completed items. Use HELP for instructions' })
       } else {
-        response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You have ${tasks.length} item marked as done:`, true) })
+        return constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You have ${tasks.length} item marked as done:`, true) })
       }
     })
   } else if (text.match('LIST')) {
-    Task.selectTasks({ user_id: senderID })
+    return Task.selectTasks({ user_id: senderID })
     .then(tasks => {
       if (!tasks.length) {
-        console.log('tasks are empty')
-        response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
+        return constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
       } else {
-        console.log('tasks are not empty')
-        response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
+        return constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
       }
     })
   } else if (text.match(/#(.) DONE/)) {
     const taskID = parseInt(text.match(/#(.) DONE/)[1])
-    Task.markAsComplete({ id: taskID })
-    .then(description => {
-      response = constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` })
-    })
+    return Task.markAsComplete({ id: taskID })
+    .then(description => constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` }))
   } else {
-    response = constructResponse({ senderID: senderID, text: HELP_MSG })
+    const response = constructResponse({ senderID: senderID, text: HELP_MSG })
+    return Promise.resolve(response)
   }
-  console.log(response)
-  return sendRequest(response)
 }
 
 const formatListResponse = (data, botMessage, showCompleted = false) => {
