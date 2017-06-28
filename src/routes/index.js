@@ -64,7 +64,13 @@ const buildResponseFromRequest = event => {
   } else if (text.match(/#(.) DONE/)) {
     const taskID = parseInt(text.match(/#(.) DONE/)[1])
     return Task.markAsComplete({ id: taskID })
-    .then(description => constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` }))
+    .then(description => {
+      if (description) {
+        return constructResponse({ senderID: senderID, text: `To-do item ${taskID} (“${description}") marked as done.` })
+      } else {
+        return constructResponse({ senderID: senderID, text: `You do not have an item with id ${taskID} to mark as complete. Use HELP for instructions` })
+      }
+    })
   } else {
     const response = constructResponse({ senderID: senderID, text: HELP_MSG })
     return Promise.resolve(response)
