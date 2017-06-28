@@ -53,7 +53,7 @@ const respondToRequest = event => {
       }
     })
   } else if (text.match('LIST')) {
-    console.log('in LISTing tasks: ', tasks, senderID, response)
+    console.log('in LISTing tasks: ')
     Task.selectTasks({ user_id: senderID })
     .then(tasks => {
       if (!tasks) {
