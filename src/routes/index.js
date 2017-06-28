@@ -56,8 +56,10 @@ const respondToRequest = event => {
     Task.selectTasks({ user_id: senderID })
     .then(tasks => {
       if (!tasks.length) {
+        console.log('tasks are empty')
         response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
       } else {
+        console.log('tasks are not empty')
         response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
       }
     })
@@ -70,6 +72,7 @@ const respondToRequest = event => {
   } else {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
+  console.log(response)
   return sendRequest(response)
 }
 
