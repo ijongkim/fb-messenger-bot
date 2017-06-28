@@ -46,22 +46,18 @@ const respondToRequest = event => {
   } else if (text.match('LIST DONE')) {
     Task.selectCompletedTasks({ user_id: senderID })
     .then(tasks => {
-      if (!tasks) {
+      if (!tasks.length) {
         response = constructResponse({ senderID: senderID, text: 'You do not have any completed items. Use HELP for instructions' })
       } else {
         response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You have ${tasks.length} item marked as done:`, true) })
       }
     })
   } else if (text.match('LIST')) {
-    console.log('in LISTing tasks: ')
     Task.selectTasks({ user_id: senderID })
     .then(tasks => {
-      if (!tasks) {
-        console.log('got tasks: ', tasks, senderID, response)
+      if (!tasks.length) {
         response = constructResponse({ senderID: senderID, text: 'You do not have any items. Use HELP for instructions to create one' })
-        console.log('response should be valid :', response)
       } else {
-        console.log('tasks exists: ', tasks)
         response = constructResponse({ senderID: senderID, text: formatListResponse(tasks, `You currently have ${tasks.length} to-do items:`) })
       }
     })
@@ -74,7 +70,6 @@ const respondToRequest = event => {
   } else {
     response = constructResponse({ senderID: senderID, text: HELP_MSG })
   }
-  console.log('response should be valid at line 75:', response)
   return sendRequest(response)
 }
 
